@@ -11,7 +11,7 @@ module "resource_group_hub" {
 
 #Specify the subscription logging repositories 
 module "activity_logs" {
-  source = "git://github.com/aztfmod/activity_logs.git?ref=v0.4"
+  source = "git://github.com/aztfmod/activity_logs.git?ref=v0.5"
 
   prefix              = "${var.prefix}"
   resource_group_name = module.resource_group_hub.names["HUB-CORE-SEC"]
@@ -44,7 +44,7 @@ module "log_analytics" {
 
 # Create the Azure Security Center workspace
 module "security_center" {
-  source = "git://github.com/aztfmod/azure_security_center.git?ref=v0.3"
+  source = "git://github.com/aztfmod/azure_security_center.git?ref=v0.4"
 
   contact_email = var.security_center["contact_email"]
   contact_phone = var.security_center["contact_phone"]
