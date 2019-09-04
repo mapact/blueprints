@@ -1,5 +1,4 @@
 # SAMPLE FILE FOR TRANQUILITY BLUEPRINT
-# Check documentation and design decisions on Wiki: https://dev.azure.com/azure-terraform/Blueprints/_wiki/ 
 
 # Azure Subscription activity logs retention period
 azure_activity_logs_retention = 365

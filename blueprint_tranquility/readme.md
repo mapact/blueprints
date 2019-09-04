@@ -43,7 +43,7 @@ As an example of configuration, use the foundations.auto.tfvars provided in the 
 The provided foundations.auto.tfvars allows you to deploy your first version of blueprint_tranquility and see the typical options
 
 ## Foundations
-The output of blueprint_tranquility will be stored in Azure Storage Account and will be read by subsequent modules. <br/> Please do not modify the provided output variables but add additionnal below if you need to extend the model.
+Please do not modify the provided output variables but add additionnal below if you need to extend the model.
 
 
 

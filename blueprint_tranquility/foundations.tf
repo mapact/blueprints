@@ -1,9 +1,9 @@
 
 # Create the resource groups to host the blueprint
 module "resource_group_hub" {
-  source = "git://github.com/aztfmod/resource_group.git?ref=v0.1"
+  source = "git://github.com/aztfmod/resource_group.git?ref=v0.3"
 
-  prefix          = "${var.prefix}"
+  prefix          = var.prefix
   resource_groups = var.resource_groups_hub
   location        = var.location_map["region1"]
   tags            = var.tags_hub
@@ -13,7 +13,7 @@ module "resource_group_hub" {
 module "activity_logs" {
   source = "git://github.com/aztfmod/activity_logs.git?ref=v0.5"
 
-  prefix              = "${var.prefix}"
+  prefix              = var.prefix
   resource_group_name = module.resource_group_hub.names["HUB-CORE-SEC"]
   location            = var.location_map["region1"]
   tags                = var.tags_hub
@@ -24,7 +24,7 @@ module "activity_logs" {
 module "diagnostics_logging" {
   source = "git://github.com/aztfmod/diagnostics_logging.git?ref=v0.1"
 
-  prefix                = "${var.prefix}"
+  prefix                = var.prefix
   resource_group_name   = module.resource_group_hub.names["HUB-OPERATIONS"]
   location              = var.location_map["region1"]
   tags                  = var.tags_hub
@@ -34,7 +34,7 @@ module "diagnostics_logging" {
 module "log_analytics" {
   source = "git://github.com/aztfmod/log_analytics.git?ref=v0.1"
 
-  prefix              = "${var.prefix}"
+  prefix              = var.prefix
   name                = var.analytics_workspace_name
   resource_group_name = module.resource_group_hub.names["HUB-OPERATIONS"]
   location            = var.location_map["region1"]
@@ -44,7 +44,7 @@ module "log_analytics" {
 
 # Create the Azure Security Center workspace
 module "security_center" {
-  source = "git://github.com/aztfmod/azure_security_center.git?ref=v0.4"
+  source = "git://github.com/aztfmod/azure_security_center.git?ref=v0.8"
 
   contact_email = var.security_center["contact_email"]
   contact_phone = var.security_center["contact_phone"]

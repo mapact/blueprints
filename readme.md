@@ -18,21 +18,21 @@ git clone https://github.com/aztfmod/blueprints.git
 ``` 
 5. Initialize the environment - this will create the fundamentals for the Terraform state, like Storage Account, Azure Key Vault, and the managed identities.
 ```
-./initialize_blueprint_azure_devops.sh
+./launchpad.sh 
 ```
 
 6. Deploy your first tranquility blueprint 
 
 ```
-./deploy_from_dev_machine.sh blueprint_tranquility init
+./launchpad.sh blueprint_tranquility plan
 ```
 Review the configuration and if you are ok with it, deploy it by running: 
 ```
-./deploy_from_dev_machine.sh blueprint_tranquility apply
+./launchpad.sh blueprint_tranquility apply
 ```
 Have fun playing with the blueprint an once you are done, you can simply delete the deployement using: 
 ```
-./deploy_from_dev_machine.sh blueprint_tranquility destroy
+./launchpad.sh blueprint_tranquility destroy
 ```
 The foundations will remain on your subscription so next run, you can jump to step 6 directly. 
 More details about tranquility can be found in the blueprint folder ./blueprint_tranquility

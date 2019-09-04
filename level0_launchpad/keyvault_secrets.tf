@@ -1,5 +1,11 @@
+# The data object waits for the permissions to be set before it can be used by the provider
+data "azuread_service_principal" "tfstate" {
+    depends_on      = [azurerm_key_vault.tfstate, azurerm_role_assignment.sp_tfstate_reader, azurerm_role_assignment.tfstate_role1]
+    display_name    = azuread_application.tfstate.name
+}
+
 provider "azurerm" {
-    client_id       = azuread_application.tfstate.application_id
+    client_id       = data.azuread_service_principal.tfstate.application_id
     client_secret   = random_string.tfstate_password.result
     subscription_id = data.azurerm_client_config.current.subscription_id
     tenant_id       = data.azurerm_client_config.current.tenant_id
@@ -11,7 +17,6 @@ provider "azurerm" {
 ## Store the tfstate storage account details in the keyvault to allow the deployment script to 
 # connect to the storage account
 resource "azurerm_key_vault_secret" "tfstate_resource_group" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
 
     name          = "tfstate-resource-group"
@@ -20,7 +25,6 @@ resource "azurerm_key_vault_secret" "tfstate_resource_group" {
 }
 
 resource "azurerm_key_vault_secret" "tfstate_storage_account_name" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
     
     name         = "tfstate-storage-account-name"
@@ -29,7 +33,6 @@ resource "azurerm_key_vault_secret" "tfstate_storage_account_name" {
 }
 
 resource "azurerm_key_vault_secret" "tfstate_container" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
     
     name         = "tfstate-container"
@@ -38,7 +41,6 @@ resource "azurerm_key_vault_secret" "tfstate_container" {
 }
 
 resource "azurerm_key_vault_secret" "tfstate_prefix" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
     
     name         = "tfstate-prefix"
@@ -47,7 +49,6 @@ resource "azurerm_key_vault_secret" "tfstate_prefix" {
 }
 
 resource "azurerm_key_vault_secret" "tfstate_blob_name" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
     
     name         = "tfstate-blob-name"
@@ -56,7 +57,6 @@ resource "azurerm_key_vault_secret" "tfstate_blob_name" {
 }
 
 resource "azurerm_key_vault_secret" "tfstate_msi_client_id" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
     
     name         = "tfstate-msi-client-id"
@@ -65,7 +65,6 @@ resource "azurerm_key_vault_secret" "tfstate_msi_client_id" {
 }
 
 resource "azurerm_key_vault_secret" "tfstate_msi_principal_id" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
     
     name         = "tfstate-msi-principal-id"
@@ -74,10 +73,42 @@ resource "azurerm_key_vault_secret" "tfstate_msi_principal_id" {
 }
 
 resource "azurerm_key_vault_secret" "tfstate_msi_id" {
-    depends_on    = [azuread_service_principal_password.tfstate]
     provider      = azurerm.sp_tfstate
     
     name         = "tfstate-msi-id"
     value        = azurerm_user_assigned_identity.tfstate.id
+    key_vault_id = azurerm_key_vault.tfstate.id
+}
+
+### Service Principal for devops 
+resource "azurerm_key_vault_secret" "tfstate_sp_devops_subscription_id" {
+    provider      = azurerm.sp_tfstate
+    
+    name         = "tfstate-sp-devops-subscription-id"
+    value        = data.azurerm_client_config.current.subscription_id
+    key_vault_id = azurerm_key_vault.tfstate.id
+}
+
+resource "azurerm_key_vault_secret" "tfstate_sp_devops_client_id" {
+    provider      = azurerm.sp_tfstate
+    
+    name         = "tfstate-sp-devops-client-id"
+    value        = azuread_service_principal.devops.application_id
+    key_vault_id = azurerm_key_vault.tfstate.id
+}
+
+resource "azurerm_key_vault_secret" "tfstate_sp_devops_client_secret" {
+    provider      = azurerm.sp_tfstate
+    
+    name         = "tfstate-sp-devops-client-secret"
+    value        = random_string.devops_password.result
+    key_vault_id = azurerm_key_vault.tfstate.id
+}
+
+resource "azurerm_key_vault_secret" "tfstate_sp_devops_tenant_id" {
+    provider      = azurerm.sp_tfstate
+    
+    name         = "tfstate-sp-devops-tenant-id"
+    value        = data.azurerm_client_config.current.tenant_id
     key_vault_id = azurerm_key_vault.tfstate.id
 }
