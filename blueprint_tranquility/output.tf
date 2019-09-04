@@ -1,10 +1,3 @@
-#tranquility sets the foundation for core services
-#tranquility will export:
-#   activity log repositories
-#   ops log repositories
-#   resource group mapping
-#   log analytics workspace
-
 #outputs the ops log repositories
 output "diagnostics_map" {
     depends_on = [module.diagnostics_logging.diagnostics_map]
@@ -46,6 +39,3 @@ output "tags_hub" {
   value = var.tags_hub
 }
 
-# output "tags_spoke" {
-#   value = var.tags_spoke
-# }

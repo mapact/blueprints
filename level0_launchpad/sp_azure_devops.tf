@@ -9,7 +9,7 @@ resource "azuread_service_principal" "devops" {
 resource "azuread_service_principal_password" "devops" {
   service_principal_id = "${azuread_service_principal.devops.id}"
   value                = random_string.devops_password.result
-  end_date             = timeadd(timestamp(), "43200m")
+  end_date_relative    = "43200m"
 }
 
 resource "random_string" "devops_password" {
@@ -23,7 +23,7 @@ resource "random_string" "devops_password" {
 resource "azurerm_role_assignment" "devops_role1" {
   scope                = "${data.azurerm_subscription.primary.id}"
   role_definition_name = "Owner"
-  principal_id         = azuread_service_principal.devops.id
+  principal_id         = azuread_service_principal.devops.object_id
 }
 
 

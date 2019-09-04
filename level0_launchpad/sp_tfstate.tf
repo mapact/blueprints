@@ -14,7 +14,7 @@ resource "azuread_service_principal_password" "tfstate" {
 
 resource "random_string" "tfstate_password" {
     length  = 250
-    special = true
+    special = false
     upper   = true
     number  = true
 }
@@ -24,4 +24,10 @@ resource "azurerm_user_assigned_identity" "tfstate" {
   location            = azurerm_resource_group.rg.location
 
   name = "${random_string.prefix.result}tfstate_msi"
+}
+
+resource "azurerm_role_assignment" "tfstate_role1" {
+  scope                = "${data.azurerm_subscription.primary.id}"
+  role_definition_name = "Owner"
+  principal_id         = azuread_service_principal.tfstate.object_id
 }
